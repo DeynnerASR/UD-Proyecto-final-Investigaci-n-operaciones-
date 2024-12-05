@@ -37,6 +37,7 @@ const formulario = document.getElementById('dynamicForm')
 let tipo = '' //max o min
 let metodo = '' //grafico o dosfases
 
+let restricciones__transformadas = []
 
 
 /*
@@ -68,12 +69,12 @@ const crear_panel_informacion_graficos = (informacion)=>{
   if(tipo == 'max'){
     indice = informacion.maxIndex
     item_valor_resultado.innerHTML = `Valor maximo : ${informacion.maxValue}`
-    item_valor_interseccion_resultado.innerHTML = `Intersección resultado ${informacion.intersections.indice}`;
   }else{
     indice = informacion.minIndex
     item_valor_resultado.innerHTML = `Valor minimo : ${informacion.minValue}`
-    item_valor_interseccion_resultado.innerHTML = `Intersección resultado ${informacion.intersections.indice}`;
   }
+
+  item_valor_interseccion_resultado.innerHTML = `Interseccion resultado (${informacion.intersections[indice].x}, ${informacion.intersections[indice].y})`;
 
   console.log(
     `DATOS DE LA PETICION:
@@ -84,10 +85,11 @@ const crear_panel_informacion_graficos = (informacion)=>{
      - indice del valor_maximo : ${informacion.maxIndex}
 
      - indice prueba ${indice}
-     - interseccion resultado ${informacion.intersections[0]}
-     - interseccion resultado ${informacion.intersections[indice]}
+     - interseccion resultado (${informacion.intersections[indice].x}, ${informacion.intersections[indice].y})
     `
   );
+
+  console.log(informacion.intersections[indice]);
 
 
   panel_grafica_valor.appendChild(item_valor_interseccion_resultado)
@@ -188,7 +190,7 @@ generarFuncionObjetivo.addEventListener('click',()=>{
   
   campos_funcion_objetivo_dosFases.innerHTML = ` `
   const numero_variables = inputCantidadVariables.value;
-  
+  let i;
   for(i=0;i<numero_variables;i++){
     crearCampos(campos_funcion_objetivo_dosFases,i,numero_variables);  
   }
@@ -242,6 +244,48 @@ formulario.addEventListener('submit',async (e)=>{
         if((input.value).match(/\d+/g)){
 
           if(i == 0){
+            restriccion_final = restriccion_final+`${input.value}x`
+          }else if(i+1 == inputs.length){
+            restriccion_final = restriccion_final+`=${input.value}`
+          }else{
+            restriccion_final = restriccion_final+`+${input.value}y`
+          }
+
+          
+          
+          
+
+        }else{
+
+        }
+        
+      })
+
+      restricciones__transformadas.push(restriccion_final)
+
+     console.log(`Restricciones transformadas ${restriccion_final}`);
+    })
+
+
+    
+
+    console.log(`Funcion objetivo : ${funcion_objetivo_enviar}`);
+    
+
+    //const cadena = ``
+
+  }else{
+    inputs_restricciones.forEach((restriccion)=>{
+      const inputs = Array.from(restriccion.children);
+
+      let restriccion_final = ' '
+
+      console.log(`tamano del array ${inputs.length}`);
+
+      inputs.forEach((input,i)=>{
+        if((input.value).match(/\d+/g)){
+
+          if(i == 0){
             restriccion_final = restriccion_final+`${input.value}x${i+1}`
           }else if(i+1 == inputs.length){
             restriccion_final = restriccion_final+`=${input.value}`
@@ -255,16 +299,8 @@ formulario.addEventListener('submit',async (e)=>{
         
       })
 
-      console.log(`Restricciones transformadas ${restriccion_final}`);
+     console.log(`Restricciones transformadas ${restriccion_final}`);
     })
-
-    console.log(`Funcion objetivo : ${funcion_objetivo_enviar}`);
-    
-
-    //const cadena = ``
-
-  }else{
-
   }
 
   const informacion = await realizarPeticion();
@@ -275,6 +311,7 @@ formulario.addEventListener('submit',async (e)=>{
   seccion_datos_grafica.innerHTML = ' '
   seccion_datos_grafica.appendChild(panel_datos_grafica);
   
+  graficar(informacion)
   
   
 
@@ -323,6 +360,24 @@ generarRestricciones.addEventListener('click', () => {
 });
 
 
+const graficar = (informacion) =>{
+  var elt = document.getElementById('calculator');
+  var calculator = Desmos.GraphingCalculator(elt);
+//Realizar los puntos donde hay intersecciones
+  informacion.intersections.forEach((interseccion,i)=>{
+    const punto_x = interseccion.x;
+    const punto_y = interseccion.y;
+    calculator.setExpression({ id:`point${i+1}`, latex:`(${punto_x},${punto_y})`, label: `Punto ${i+1} `, showLabel: true });
+  })
+
+  restricciones__transformadas.forEach((restriccion,i)=>{
+    calculator.setExpression({ id: `func${i}`, latex: `${restriccion}` });
+  })
+  
+}
+
+
+
 const realizarPeticion = async (funcionObjetivo,arrayRestricciones,tipo)=>{
   const funcioPrueba = "2x+3y"
   const restricciones_prueba = ["12x+24y>=348","20x+10y>=220", "4x+16y>=188", "20x+30y>=680", "x<=16","y=16"];
@@ -355,81 +410,3 @@ const realizarPeticion = async (funcionObjetivo,arrayRestricciones,tipo)=>{
     return data;
     
 }
-
-
-
-/*
-       // Elementos clave
-        const radiobutton_metodoGrafico = document.getElementById('metodoGrafico');
-        const radiobutton_metodoDosPasos = document.getElementById('metodoDosPasos');
-        const seccionFuncionObjetivo = document.getElementById('funcionObjetivo');
-        const campos_funcion_objetivo_grafico = document.getElementById('graficoCampos');
-        const campos_funcion_objetivo_dosFases = document.getElementById('dosFasesCampos');
-        const seccionRestricciones = document.getElementById('restricciones');
-        const inputCantidadRestricciones = document.getElementById('cantidadRestricciones');
-        const seccionVariables = document.getElementById('variables');
-        const inputCantidadVariables = document.getElementById('cantidadDeVariables');
-        const generarFuncionObjetivo = document.getElementById('generarFuncionObjetivo');
-        const generarRestricciones = document.getElementById('generarRestricciones');
-        const camposRestricciones = document.getElementById('camposRestricciones');
-
-        let metodo = '';
-        let numeroVariables = 0;
-
-        // Mostrar campos según el método seleccionado
-        radiobutton_metodoGrafico.addEventListener('change', () => {
-            metodo = 'grafico';
-            seccionVariables.classList.add('hidden');
-            campos_funcion_objetivo_grafico.classList.remove('hidden');
-            seccionFuncionObjetivo.classList.remove('hidden');
-            seccionRestricciones.classList.remove('hidden');
-        });
-
-        radiobutton_metodoDosPasos.addEventListener('change', () => {
-            metodo = 'dosPasos';
-            campos_funcion_objetivo_grafico.classList.add('hidden');
-            seccionFuncionObjetivo.classList.add('hidden');
-            seccionRestricciones.classList.add('hidden');
-            seccionVariables.classList.remove('hidden');
-        });
-
-        // Generar función objetivo
-        generarFuncionObjetivo.addEventListener('click', () => {
-            numeroVariables = parseInt(inputCantidadVariables.value);
-            if (isNaN(numeroVariables) || numeroVariables <= 0) {
-                alert('Ingrese un número válido de variables.');
-                return;
-            }
-
-            campos_funcion_objetivo_dosFases.innerHTML = '';
-            for (let i = 0; i < numeroVariables; i++) {
-                const input = document.createElement('input');
-                input.type = 'number';
-                input.placeholder = `Variable ${i + 1}`;
-                input.required = true;
-                campos_funcion_objetivo_dosFases.appendChild(input);
-            }
-
-            seccionFuncionObjetivo.classList.remove('hidden');
-            campos_funcion_objetivo_dosFases.classList.remove('hidden');
-            seccionRestricciones.classList.remove('hidden');
-        });
-
-        // Generar restricciones
-        generarRestricciones.addEventListener('click', () => {
-            const n = parseInt(inputCantidadRestricciones.value);
-            if (isNaN(n) || n <= 0) {
-                alert('Ingrese un número válido de restricciones.');
-                return;
-            }
-
-            camposRestricciones.innerHTML = '';
-            for (let i = 0; i < n; i++) {
-                const div = document.createElement('div');
-                div.innerHTML = Array.from({ length: numeroVariables }, (_, j) => `
-                    <input type="number" placeholder="Var ${j + 1}" required>
-                    ${j < numeroVariables - 1 ? '<select><option>+</option><option>-</option></select>' : ''}
-                `).join('') + '= <input type="number" placeholder="Resultado" required>';
-                camposRestricciones.appendChild(div);
-            }
-        }); */
