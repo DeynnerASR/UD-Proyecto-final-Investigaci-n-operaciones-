@@ -1,3 +1,14 @@
+:root {
+    --fondo:#F1F1F1;
+    --formulario: #E6C767;
+    --seccion_graficos: #4C4B16;
+    --seccion_graficos-datos: #898121;
+    --botones:#F87A53;
+  }
+
+body{
+    background-color:var(--fondo);
+}
 .container{
     display: grid;
     grid-template-columns: auto auto;
@@ -8,6 +19,8 @@
 
 input{
     width: 50px;
+    border-radius: .3125rem;
+    text-align: center;
 }
 
 .form_container{
@@ -18,7 +31,7 @@ input{
 }
 
 #dynamicForm{
-    background-color: red;
+    background-color: var(--formulario);
     display: flex;
     flex-direction: column;
     border-radius: 50px;
@@ -27,15 +40,25 @@ input{
 
 .data_graphics{
     display: grid;
-    background-color: tomato;
+    background-color: var(--seccion_graficos);
     grid-template-rows: auto 1fr;
     width: 100%;
     row-gap: 10px;
     padding: 10px;
 }
 
+button{
+    background-color: var(--botones);
+    width: max-content;
+    border-radius: 10px;
+    padding: 5px;
+}
+#enviar__datos{
+    align-self: center;
+}
+
 .data_graphics__data{
-background-color: wheat;
+color: #F1F1F1;
 }
 
 #calculator{
@@ -69,6 +92,10 @@ background-color: wheat;
   #calculator{
     width: 100%;
     height: 470px;
+  }
+
+  .form_container{
+    justify-self: center;
   }
 
   /* Pantallas pequeñas (móviles) */

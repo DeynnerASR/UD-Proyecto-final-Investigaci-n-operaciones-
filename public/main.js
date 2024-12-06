@@ -205,6 +205,7 @@ generarFuncionObjetivo.addEventListener('click',()=>{
 // Evento que se ejecuta cuando el formulario es enviado
 formulario.addEventListener('submit',async (e)=>{
     e.preventDefault();
+    restricciones__transformadas.splice(0, restricciones__transformadas.length);
     alert(`El metodo seleccionado fue ${metodo}`)
     alert(`El tipo seleccionado fue ${tipo}`)
 
@@ -305,7 +306,7 @@ formulario.addEventListener('submit',async (e)=>{
 
   const informacion = await realizarPeticion();
   
-  const panel_datos_grafica =crear_panel_informacion_graficos(informacion)
+  const panel_datos_grafica = crear_panel_informacion_graficos(informacion)
   console.log(panel_datos_grafica);
   console.log(seccion_datos_grafica);
   seccion_datos_grafica.innerHTML = ' '
@@ -337,14 +338,14 @@ generarRestricciones.addEventListener('click', () => {
       const div = document.createElement('div');
       if (metodo == 'grafico'){
         div.innerHTML = `
-          <input type="number" placeholder="Número 1" required>
+          <input type="number"  required>
           <select required>
             <option value="+">+</option>
             <option value="-">-</option>
           </select>
-          <input type="number" placeholder="Número 2" required>
+          <input type="number" required>
           =
-          <input type="number" placeholder="Resultado" required>
+          <input type="number" required>
         `;
         div.classList.add('restriccion')
 
@@ -362,8 +363,11 @@ generarRestricciones.addEventListener('click', () => {
 
 const graficar = (informacion) =>{
   var elt = document.getElementById('calculator');
+  elt.innerHTML=` `;
   var calculator = Desmos.GraphingCalculator(elt);
 //Realizar los puntos donde hay intersecciones
+  calculator.setBlank();
+
   informacion.intersections.forEach((interseccion,i)=>{
     const punto_x = interseccion.x;
     const punto_y = interseccion.y;
