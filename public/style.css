@@ -45,6 +45,8 @@ input{
     width: 100%;
     row-gap: 10px;
     padding: 10px;
+
+    border-radius: 10px;
 }
 
 button{
@@ -56,6 +58,8 @@ button{
 #enviar__datos{
     align-self: center;
 }
+
+
 
 .data_graphics__data{
 color: #F1F1F1;
@@ -102,7 +106,6 @@ color: #F1F1F1;
   @media (max-width: 480px) {
     body {
       font-size: 12px;
-      background-color: lightblue;
     }
 
     .container{

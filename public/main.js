@@ -91,7 +91,7 @@ const crear_panel_informacion_graficos = (informacion)=>{
 
   console.log(informacion.intersections[indice]);
 
-
+  panel_grafica_valor.innerHTML = ``
   panel_grafica_valor.appendChild(item_valor_interseccion_resultado)
   panel_grafica_valor.appendChild(item_valor_resultado);
   
@@ -209,7 +209,7 @@ formulario.addEventListener('submit',async (e)=>{
     alert(`El metodo seleccionado fue ${metodo}`)
     alert(`El tipo seleccionado fue ${tipo}`)
 
-
+    let funcion_objetivo_enviar = ''
     const inputs_restricciones = Array.from( document.querySelectorAll('.restriccion') )
     console.log(inputs_restricciones);
 
@@ -217,7 +217,7 @@ formulario.addEventListener('submit',async (e)=>{
   if(metodo == 'grafico'){
     const inputs_funcion_objetivo = Array.from(document.querySelectorAll('.funcion_objetivo_input'));
   
-    let funcion_objetivo_enviar = ''
+    
     
 
 
@@ -261,20 +261,12 @@ formulario.addEventListener('submit',async (e)=>{
         }
         
       })
-
+      restriccion_final = restriccion_final.toString();
       restricciones__transformadas.push(restriccion_final)
 
      console.log(`Restricciones transformadas ${restriccion_final}`);
     })
-
-
-    
-
-    console.log(`Funcion objetivo : ${funcion_objetivo_enviar}`);
-    
-
-    //const cadena = ``
-
+  
   }else{
     inputs_restricciones.forEach((restriccion)=>{
       const inputs = Array.from(restriccion.children);
@@ -300,15 +292,15 @@ formulario.addEventListener('submit',async (e)=>{
         
       })
 
-     console.log(`Restricciones transformadas ${restriccion_final}`);
+     console.log(`Restriccion transformada ${restriccion_final}`);
     })
   }
 
-  const informacion = await realizarPeticion();
+  console.log(`restricciones ${restricciones__transformadas}`);
+
+  const informacion = await realizarPeticion(funcion_objetivo_enviar,restricciones__transformadas);
   
   const panel_datos_grafica = crear_panel_informacion_graficos(informacion)
-  console.log(panel_datos_grafica);
-  console.log(seccion_datos_grafica);
   seccion_datos_grafica.innerHTML = ' '
   seccion_datos_grafica.appendChild(panel_datos_grafica);
   
@@ -325,6 +317,7 @@ formulario.addEventListener('submit',async (e)=>{
 // es clickeado
 generarRestricciones.addEventListener('click', () => {
   const cantidad_restricciones = parseInt(imputCantidadRestricciones.value);
+
   if (isNaN(cantidad_restricciones) ||cantidad_restricciones <= 0) {
     alert('Por favor, ingrese una cantidad válida de restricciones.');
     return;
@@ -338,14 +331,14 @@ generarRestricciones.addEventListener('click', () => {
       const div = document.createElement('div');
       if (metodo == 'grafico'){
         div.innerHTML = `
-          <input type="number"  required>
+          <input type="number" step="any" required>
           <select required>
             <option value="+">+</option>
             <option value="-">-</option>
           </select>
-          <input type="number" required>
+          <input type="number" step="any" required>
           =
-          <input type="number" required>
+          <input type="number" step="any"  required>
         `;
         div.classList.add('restriccion')
 
@@ -383,7 +376,7 @@ const graficar = (informacion) =>{
 
 
 const realizarPeticion = async (funcionObjetivo,arrayRestricciones,tipo)=>{
-  const funcioPrueba = "2x+3y"
+  const funcioPrueba = "250x+550y"
   const restricciones_prueba = ["12x+24y>=348","20x+10y>=220", "4x+16y>=188", "20x+30y>=680", "x<=16","y=16"];
 
     const urlPeticion = 'https://graphicalmethodapi-dmd3bca6e6dpenev.canadacentral-01.azurewebsites.net/graphical-method/solve'
@@ -395,8 +388,8 @@ const realizarPeticion = async (funcionObjetivo,arrayRestricciones,tipo)=>{
               "Content-Type": "application/json",
             },
             body:JSON.stringify({
-                "objectiveFunctionText":funcioPrueba,
-                "restrictionsText":restricciones_prueba,
+                "objectiveFunctionText":funcionObjetivo,
+                "restrictionsText":arrayRestricciones,
                 "isMaximization": true
             })
         })
