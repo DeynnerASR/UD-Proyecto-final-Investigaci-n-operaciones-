@@ -37,3 +37,45 @@ input{
 .data_graphics__data{
 background-color: wheat;
 }
+
+
+
+@media (max-width: 768px) {
+    body {
+      font-size: 14px;
+      background-color: lightgray;
+    }
+
+    .container{
+        display: grid;
+        grid-template-rows: auto auto;
+        gap: 20px;
+        width: 100%;
+        height: 100%;
+    }
+
+    .section{
+        display: flex;
+        flex-direction: column;
+        
+    }
+    
+  }
+  
+  /* Pantallas pequeñas (móviles) */
+  @media (max-width: 480px) {
+    body {
+      font-size: 12px;
+      background-color: lightblue;
+    }
+
+    .container{
+        display: grid;
+        grid-template-rows: auto auto;
+        grid-template-columns: 100%;
+        gap: 20px;
+        width: 100%;
+        height: 100%;
+    }
+
+  }
