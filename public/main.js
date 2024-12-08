@@ -1,16 +1,18 @@
-// Radio buttons destinados al metodo
-const radiobutton_metodoGrafico = document.getElementById('metodoGrafico');
-const radiobuttonmetodoDosPasos = document.getElementById('metodoDosPasos');
-
 // Radio buttons destinados al tipo de ejercicio Maximización o Minimización
 const radioButtonMaximo = document.getElementById('maximizacion')
 const radioButtonMin = document.getElementById('minimizacion')
+
+// Radio buttons destinados al metodo
+const radiobutton_metodoGrafico = document.getElementById('metodoGrafico');
+const radiobuttonmetodoDosPasos = document.getElementById('metodoDosPasos');
 
 // seccion de la función objetivo
 const seccionFuncionObjetivo = document.getElementById('funcionObjetivo');
 
 // Campos pertenecientes a la funcion objetivo del metodo grafico
 const campos_funcion_objetivo_grafico = document.getElementById('graficoCampos');
+
+// Campos pertenecientes a la funcion objetivo del metodo dos faces
 const campos_funcion_objetivo_dosFases = document.getElementById('dosFasesCampos');
 
 // Sección de restricciones
@@ -37,6 +39,8 @@ const formulario = document.getElementById('dynamicForm')
 let tipo = '' //max o min
 let metodo = '' //grafico o dosfases
 
+// Array que permitira guardar las restricciones transformadas
+// para enviarlas a la peticion.
 let restricciones__transformadas = []
 
 
@@ -44,6 +48,10 @@ let restricciones__transformadas = []
   Funciones necesarias
 */
 
+
+/* Crea la información asociada al resultado de la petición
+
+*/
 const crear_panel_informacion_graficos = (informacion)=>{
   const panel = document.createElement('div');
   panel.classList.add('panel_datos_grafica');
@@ -54,11 +62,9 @@ const crear_panel_informacion_graficos = (informacion)=>{
   const panel_grafica_valor = document.createElement('ul');
   panel_grafica_valor.classList.add('panel_datos_grafica__valor')
 
- 
-
-  informacion.intersections.forEach((interseccion,i)=>{
+  informacion.allIntersections.forEach((interseccion,i)=>{
     const item_punto_interseccion = document.createElement('li');
-    item_punto_interseccion.innerHTML = `Interseccion #${i+1}: (${interseccion.x},${interseccion.y}) `
+    item_punto_interseccion.innerHTML = `<strong>Interseccion #${i+1}: </strong>(${interseccion.x},${interseccion.y}) `
     panel_interseccion.appendChild(item_punto_interseccion);
   })
 
@@ -74,22 +80,22 @@ const crear_panel_informacion_graficos = (informacion)=>{
     item_valor_resultado.innerHTML = `Valor minimo : ${informacion.minValue}`
   }
 
-  item_valor_interseccion_resultado.innerHTML = `Interseccion resultado (${informacion.intersections[indice].x}, ${informacion.intersections[indice].y})`;
+  item_valor_interseccion_resultado.innerHTML = `Interseccion resultado (${informacion.allIntersections[indice].x}, ${informacion.allIntersections[indice].y})`;
 
   console.log(
     `DATOS DE LA PETICION:
-     - intersecciones: ${informacion.intersections}
+     - intersecciones: ${informacion.allIntersections}
      - valor_maximo : ${informacion.maxValue}
      - valor_minimo : ${informacion.minValue}
      - indice del valor_minimo : ${informacion.minIndex}
      - indice del valor_maximo : ${informacion.maxIndex}
 
      - indice prueba ${indice}
-     - interseccion resultado (${informacion.intersections[indice].x}, ${informacion.intersections[indice].y})
+     - interseccion resultado (${informacion.allIntersections[indice].x}, ${informacion.allIntersections[indice].y})
     `
   );
 
-  console.log(informacion.intersections[indice]);
+  console.log(informacion.allIntersections[indice]);
 
   panel_grafica_valor.innerHTML = ``
   panel_grafica_valor.appendChild(item_valor_interseccion_resultado)
@@ -119,7 +125,7 @@ radioButtonMin.addEventListener('change', () => {
 
 
 
-/* Mostrar campos según el método seleccionado Metodo grafico / Metodo dos pasos
+/* Mostrar campos según el radiobutton del método seleccionado Metodo grafico / Metodo dos pasos
 */
 
 // Metodo grafico
@@ -205,11 +211,15 @@ generarFuncionObjetivo.addEventListener('click',()=>{
 // Evento que se ejecuta cuando el formulario es enviado
 formulario.addEventListener('submit',async (e)=>{
     e.preventDefault();
+
+    //Elimino las restricciones guardadas en el array de "restricciones__transforamdas"
     restricciones__transformadas.splice(0, restricciones__transformadas.length);
+
     alert(`El metodo seleccionado fue ${metodo}`)
     alert(`El tipo seleccionado fue ${tipo}`)
 
     let funcion_objetivo_enviar = ''
+
     const inputs_restricciones = Array.from( document.querySelectorAll('.restriccion') )
     console.log(inputs_restricciones);
 
@@ -217,10 +227,6 @@ formulario.addEventListener('submit',async (e)=>{
   if(metodo == 'grafico'){
     const inputs_funcion_objetivo = Array.from(document.querySelectorAll('.funcion_objetivo_input'));
   
-    
-    
-
-
     inputs_funcion_objetivo.forEach((elemento,i)=>{
       console.log(elemento.value);
       console.log(`tipo del elemento ${typeof(elemento.value)}`);
@@ -242,22 +248,22 @@ formulario.addEventListener('submit',async (e)=>{
       console.log(`tamano del array ${inputs.length}`);
 
       inputs.forEach((input,i)=>{
-        if((input.value).match(/\d+/g)){
+                /*       if((input.value).match(/\d+/g)){
 
-          if(i == 0){
-            restriccion_final = restriccion_final+`${input.value}x`
-          }else if(i+1 == inputs.length){
-            restriccion_final = restriccion_final+`=${input.value}`
-          }else{
-            restriccion_final = restriccion_final+`+${input.value}y`
-          }
 
-          
-          
-          
 
+
+                }else{
+
+                }
+        */
+
+        if(i == 0){
+          restriccion_final = restriccion_final+`${input.value}x`
+        }else if(i == 2){
+          restriccion_final = restriccion_final+`${input.value}y`
         }else{
-
+          restriccion_final = restriccion_final+`${input.value}`
         }
         
       })
@@ -304,7 +310,7 @@ formulario.addEventListener('submit',async (e)=>{
   seccion_datos_grafica.innerHTML = ' '
   seccion_datos_grafica.appendChild(panel_datos_grafica);
   
-  graficar(informacion)
+  graficar(funcion_objetivo_enviar,informacion)
   
   
 
@@ -337,7 +343,10 @@ generarRestricciones.addEventListener('click', () => {
             <option value="-">-</option>
           </select>
           <input type="number" step="any" required>
-          =
+          <select required>
+            <option value=">=">≥</option>
+            <option value="<=">≤</option>
+          </select>
           <input type="number" step="any"  required>
         `;
         div.classList.add('restriccion')
@@ -354,32 +363,65 @@ generarRestricciones.addEventListener('click', () => {
 });
 
 
-const graficar = (informacion) =>{
+const graficar = (funcionObjetivo,informacion) =>{
   var elt = document.getElementById('calculator');
   elt.innerHTML=` `;
   var calculator = Desmos.GraphingCalculator(elt);
-//Realizar los puntos donde hay intersecciones
+
   calculator.setBlank();
 
-  informacion.intersections.forEach((interseccion,i)=>{
+  informacion.allIntersections.forEach((interseccion,i)=>{
     const punto_x = interseccion.x;
     const punto_y = interseccion.y;
     calculator.setExpression({ id:`point${i+1}`, latex:`(${punto_x},${punto_y})`, label: `Punto ${i+1} `, showLabel: true });
   })
 
   restricciones__transformadas.forEach((restriccion,i)=>{
-    calculator.setExpression({ id: `func${i}`, latex: `${restriccion}` });
+    // Reemplazar >= o <= por =
+    restriccion = restriccion.replace(/(>=|<=|<|>)/, "=");
+    calculator.setExpression(
+      { 
+      id: `func${i}`, 
+      latex: `${restriccion}`, 
+      label: `Restriccion`, // Etiqueta dinámica
+      showLabel: true    
+    }
+    );
   })
+
+   
+   if(tipo == 'max'){
+    funcionObjetivo = funcionObjetivo + `= ${informacion.maxValue}`
+   }else{
+    funcionObjetivo = funcionObjetivo + `= ${informacion.minValue}`
+   }
+
+
+
+  calculator.setExpression(
+    { 
+    id: `funcOjetivo`, 
+    latex: `${funcionObjetivo}`, 
+    label: `F_objetivo`, // Etiqueta dinámica
+    showLabel: true    
+  }
+  );
   
 }
-
-
 
 const realizarPeticion = async (funcionObjetivo,arrayRestricciones,tipo)=>{
   const funcioPrueba = "250x+550y"
   const restricciones_prueba = ["12x+24y>=348","20x+10y>=220", "4x+16y>=188", "20x+30y>=680", "x<=16","y=16"];
 
     const urlPeticion = 'https://graphicalmethodapi-dmd3bca6e6dpenev.canadacentral-01.azurewebsites.net/graphical-method/solve'
+
+
+      const body_de_peticion = {
+        "objectiveFunctionText":funcionObjetivo,
+        "restrictionsText":arrayRestricciones,
+        "isMaximization": true
+      }
+      console.log(body_de_peticion);
 
     const response = await fetch(urlPeticion,
         {
