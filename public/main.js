@@ -1,3 +1,5 @@
+
+
 // Radio buttons destinados al tipo de ejercicio Maximización o Minimización
 const radioButtonMaximo = document.getElementById('maximizacion')
 const radioButtonMin = document.getElementById('minimizacion')
@@ -49,27 +51,34 @@ let restricciones__transformadas = []
 */
 
 
-/* Crea la información asociada al resultado de la petición
-
+/* 
+Crea la información asociada al resultado de la petición
 */
 const crear_panel_informacion_graficos = (informacion)=>{
+
+
+  /*La variable panel, alojara la informacion de la petición
+    Las intersecciones .
+    Y el valor resultado.
+  */
   const panel = document.createElement('div');
   panel.classList.add('panel_datos_grafica');
 
-  const panel_interseccion = document.createElement('ul');
-  panel_interseccion.classList.add('panel_datos_grafica__intersecciones')
+    const panel_interseccion = document.createElement('ul');
+    panel_interseccion.classList.add('panel_datos_grafica-intersecciones')
 
-  const panel_grafica_valor = document.createElement('ul');
-  panel_grafica_valor.classList.add('panel_datos_grafica__valor')
+    const panel_grafica_valor = document.createElement('ul');
+    panel_grafica_valor.classList.add('panel_datos_grafica__valor')
 
   informacion.allIntersections.forEach((interseccion,i)=>{
     const item_punto_interseccion = document.createElement('li');
+
     item_punto_interseccion.innerHTML = `<strong>Interseccion #${i+1}: </strong>(${interseccion.x},${interseccion.y}) `
     panel_interseccion.appendChild(item_punto_interseccion);
   })
 
-  // si el tipo max o min
-  let indice ;
+  let indice;
+
   const item_valor_interseccion_resultado = document.createElement('li');
   const item_valor_resultado = document.createElement('li');
   if(tipo == 'max'){
@@ -135,11 +144,12 @@ radiobutton_metodoGrafico.addEventListener('change', () => {
   camposRestricciones.innerHTML = '';
   campos_funcion_objetivo_dosFases.innerHTML = ` `
 
-  seccionFuncionObjetivo.classList.remove('hidden');
+  seccionFuncionObjetivo.classList.remove('hidden'); //Sección de la funcion objetivo destinada al metodo de dos faces
+
   campos_funcion_objetivo_grafico.classList.remove('hidden');
   seccionRestricciones.classList.remove('hidden');
 
-  seccionVariables.classList.add('hidden');
+  seccionVariables.classList.add('hidden'); // Campo de variables destinado al metodo de dos faces
   
 });
 
@@ -161,23 +171,28 @@ radiobuttonmetodoDosPasos.addEventListener('change', () => {
   //restricciones.classList.remove('hidden');
 });
 
+/*
+  La funcion "crearCampos", permite crear el input individual de una funcion objetivo (destinado al coeficiente que acompaña la constante),
+  junto a su simbolo (que puede ser "+" o "-").
 
+  Esta se usa para la función objetivo del metodo de dos faces.
+*/
 const crearCampos = (campo, i,numero_variables)=>{
   const input = document.createElement('input')
   input.type = 'number'
   input.required;
 
   const simbolo = document.createElement('select');
-  const opcionSuma = document.createElement('option');
-  opcionSuma.value = "+";
-  opcionSuma.textContent = "+";
 
-  const opcionResta = document.createElement('option');
-  opcionResta.value = "-";
-  opcionResta.textContent = "-";
+    const opcionSuma = document.createElement('option');
+    opcionSuma.value = "+";
+    opcionSuma.textContent = "+";
+
+    const opcionResta = document.createElement('option');
+    opcionResta.value = "-";
+    opcionResta.textContent = "-";
 
   simbolo.required;
-
   simbolo.appendChild(opcionSuma)
   simbolo.appendChild(opcionResta)
 
@@ -190,23 +205,43 @@ const crearCampos = (campo, i,numero_variables)=>{
   
 }
 
-// Evento que se ejecuta cuando el boton de "Generar funcion objetivo" es clickeado
-// en el metodo de dos faces
+/* Evento que se ejecuta cuando el boton de "Generar funcion objetivo" es clickeado
+   en el metodo de dos faces 
+*/
 generarFuncionObjetivo.addEventListener('click',()=>{
   
   campos_funcion_objetivo_dosFases.innerHTML = ` `
+
   const numero_variables = inputCantidadVariables.value;
+
   let i;
-  for(i=0;i<numero_variables;i++){
+  for ( i=0 ; i<numero_variables ; i++ ){
     crearCampos(campos_funcion_objetivo_dosFases,i,numero_variables);  
   }
 
   console.log(campos_funcion_objetivo_dosFases);
+
   seccionFuncionObjetivo.classList.remove('hidden')
+  
   campos_funcion_objetivo_dosFases.classList.remove('hidden')
 
   seccionRestricciones.classList.remove('hidden')
 })
+
+
+
+const crearCadenaMetodoGrafico = (cadena,valor_nuevo,i)=>{
+  if(i == 0){
+    cadena= cadena+`${valor_nuevo}x`
+  }else if(i == 2){
+    cadena= cadena+`${valor_nuevo}y`
+  }else{
+    cadena = cadena +`${valor_nuevo}`
+  }  
+
+return cadena;
+}
+
 
 // Evento que se ejecuta cuando el formulario es enviado
 formulario.addEventListener('submit',async (e)=>{
@@ -231,13 +266,7 @@ formulario.addEventListener('submit',async (e)=>{
       console.log(elemento.value);
       console.log(`tipo del elemento ${typeof(elemento.value)}`);
 
-        if(i == 0){
-          funcion_objetivo_enviar= funcion_objetivo_enviar+`${elemento.value}x`
-        }else if(i == 2){
-          funcion_objetivo_enviar= funcion_objetivo_enviar+`${elemento.value}y`
-        }else{
-          funcion_objetivo_enviar = funcion_objetivo_enviar+`${elemento.value}`
-        }  
+      funcion_objetivo_enviar = crearCadenaMetodoGrafico(funcion_objetivo_enviar, elemento.value, i);
     })
 
     inputs_restricciones.forEach((restriccion)=>{
@@ -248,24 +277,7 @@ formulario.addEventListener('submit',async (e)=>{
       console.log(`tamano del array ${inputs.length}`);
 
       inputs.forEach((input,i)=>{
-                /*       if((input.value).match(/\d+/g)){
-
-
-
-
-                }else{
-
-                }
-        */
-
-        if(i == 0){
-          restriccion_final = restriccion_final+`${input.value}x`
-        }else if(i == 2){
-          restriccion_final = restriccion_final+`${input.value}y`
-        }else{
-          restriccion_final = restriccion_final+`${input.value}`
-        }
-        
+        restriccion_final = crearCadenaMetodoGrafico(restriccion_final, input.value, i);        
       })
       restriccion_final = restriccion_final.toString();
       restricciones__transformadas.push(restriccion_final)
@@ -273,7 +285,7 @@ formulario.addEventListener('submit',async (e)=>{
      console.log(`Restricciones transformadas ${restriccion_final}`);
     })
   
-  }else{
+  }else{ //Si el metodo es el dos fases
     inputs_restricciones.forEach((restriccion)=>{
       const inputs = Array.from(restriccion.children);
 
@@ -364,9 +376,9 @@ generarRestricciones.addEventListener('click', () => {
 
 
 const graficar = (funcionObjetivo,informacion) =>{
-  var elt = document.getElementById('calculator');
+  let elt = document.getElementById('calculator');
   elt.innerHTML=` `;
-  var calculator = Desmos.GraphingCalculator(elt);
+  let calculator = Desmos.GraphingCalculator(elt);
 
   calculator.setBlank();
 
@@ -395,9 +407,6 @@ const graficar = (funcionObjetivo,informacion) =>{
    }else{
     funcionObjetivo = funcionObjetivo + `= ${informacion.minValue}`
    }
-
-
-
   calculator.setExpression(
     { 
     id: `funcOjetivo`, 
@@ -410,8 +419,7 @@ const graficar = (funcionObjetivo,informacion) =>{
 }
 
 const realizarPeticion = async (funcionObjetivo,arrayRestricciones,tipo)=>{
-  const funcioPrueba = "250x+550y"
-  const restricciones_prueba = ["12x+24y>=348","20x+10y>=220", "4x+16y>=188", "20x+30y>=680", "x<=16","y=16"];
+
 
     const urlPeticion = 'https://graphicalmethodapi-dmd3bca6e6dpenev.canadacentral-01.azurewebsites.net/graphical-method/solve'
 
