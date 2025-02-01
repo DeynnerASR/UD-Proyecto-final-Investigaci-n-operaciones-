@@ -448,7 +448,7 @@ const realizarPeticion = async (funcionObjetivo,arrayRestricciones,tipo)=>{
       return muestraAlgo.json()
     });
 */
-    const data = response.json()
+    const data = await response.json()
 
     data.then((informacion)=>{
       console.log(informacion);
