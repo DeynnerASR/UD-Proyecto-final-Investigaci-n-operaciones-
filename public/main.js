@@ -195,11 +195,11 @@ const crearCampos = (campo, i,numero_variables)=>{
 
     const opcion_mayorIgual = document.createElement('option');
     opcion_mayorIgual.value = ">=";
-    opcion_mayorIgual.textContent = ">=";
+    opcion_mayorIgual.textContent = "≥";
 
     const opcion_menorIgual = document.createElement('option');
     opcion_mayorIgual.value = "<=";
-    opcion_mayorIgual.textContent = "<=";
+    opcion_mayorIgual.textContent = "≤";
   
     const opcionResta = document.createElement('option');
     opcionResta.value = "-";
