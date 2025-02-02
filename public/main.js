@@ -178,6 +178,7 @@ radiobuttonmetodoDosPasos.addEventListener('change', () => {
   Esta se usa para la función objetivo del metodo de dos faces.
 */
 const crearCampos = (campo, i,numero_variables)=>{
+  
   const input = document.createElement('input')
   input.type = 'number'
   input.required;
@@ -188,6 +189,18 @@ const crearCampos = (campo, i,numero_variables)=>{
     opcionSuma.value = "+";
     opcionSuma.textContent = "+";
 
+    const opcionIgual = document.createElement('option');
+    opcionIgual.value = "=";
+    opcionIgual.textContent = "=";
+
+    const opcion_mayorIgual = document.createElement('option');
+    opcion_mayorIgual.value = ">=";
+    opcion_mayorIgual.textContent = ">=";
+
+    const opcion_menorIgual = document.createElement('option');
+    opcion_mayorIgual.value = "<=";
+    opcion_mayorIgual.textContent = "<=";
+  
     const opcionResta = document.createElement('option');
     opcionResta.value = "-";
     opcionResta.textContent = "-";
@@ -198,10 +211,14 @@ const crearCampos = (campo, i,numero_variables)=>{
 
   campo.appendChild(input);
   if(i == ((numero_variables)-1)){
+    simbolo.appendChild(opcionIgual)
+    simbolo.appendChild(opcion_mayorIgual)
+    simbolo.appendChild(opcion_menorIgual)
     
   }else{
-    campo.appendChild(simbolo);
+    
   }
+  campo.appendChild(simbolo);
   
 }
 
