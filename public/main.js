@@ -217,7 +217,6 @@ const crearCampos = (campo, i,numero_variables)=>{
     
   }else{
     campo.appendChild(simbolo);
-    campo.appenChild(input)
   }
   campo.appendChild(simbolo);
   
