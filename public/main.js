@@ -177,7 +177,7 @@ radiobuttonmetodoDosPasos.addEventListener('change', () => {
 
   Esta se usa para la función objetivo del metodo de dos faces.
 */
-const crearCampos = (campo, i,numero_variables)=>{
+const crearCampos = (campo, i,numero_variables,tipo)=>{
   
   const input = document.createElement('input')
   input.type = 'number'
@@ -210,11 +210,10 @@ const crearCampos = (campo, i,numero_variables)=>{
   simbolo.appendChild(opcionResta)
 
   campo.appendChild(input);
-  if(i == ((numero_variables)-1)){
-    simbolo.appendChild(opcionIgual)
-    simbolo.appendChild(opcion_mayorIgual)
-    simbolo.appendChild(opcion_menorIgual)
-    
+  if(i == ((numero_variables)-1) && (tipo == 'restriccion')){
+      simbolo.appendChild(opcionIgual)
+      simbolo.appendChild(opcion_mayorIgual)
+      simbolo.appendChild(opcion_menorIgual)
   }else{
     alert('HACIENDO ALGO')
   }
@@ -233,7 +232,7 @@ generarFuncionObjetivo.addEventListener('click',()=>{
 
   let i;
   for ( i=0 ; i<numero_variables ; i++ ){
-    crearCampos(campos_funcion_objetivo_dosFases,i,numero_variables);  
+    crearCampos(campos_funcion_objetivo_dosFases,i,numero_variables,'funcion');  
   }
 
   console.log(campos_funcion_objetivo_dosFases);
@@ -425,7 +424,7 @@ generarRestricciones.addEventListener('click', () => {
         div.id = `restriccion${i+1}`
         camposRestricciones.appendChild(div);
       }else{
-
+        crearCampos(camposRestricciones,i,numero_variables,'restriccion');
       }
         
     }
