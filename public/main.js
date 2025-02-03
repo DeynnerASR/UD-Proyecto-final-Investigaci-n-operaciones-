@@ -216,7 +216,7 @@ const crearCampos = (campo, i,numero_variables)=>{
     simbolo.appendChild(opcion_menorIgual)
     
   }else{
-    campo.appendChild(simbolo);
+    alert('HACIENDO ALGO')
   }
   campo.appendChild(simbolo);
   
