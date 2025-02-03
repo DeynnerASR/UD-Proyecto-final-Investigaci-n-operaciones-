@@ -245,6 +245,48 @@ generarFuncionObjetivo.addEventListener('click',()=>{
   seccionRestricciones.classList.remove('hidden')
 })
 
+window.validar_numeros = function validar_numeros(valor_nuevo){
+    if (!valor_nuevo || !valor_nuevo.value) {
+      console.error("valor_nuevo no es un input válido" + valor_nuevo.value);
+      return '';
+    }
+  
+    valor_nuevo.value = valor_nuevo.value.replace(/[^0-9./]/g, '');
+  
+    let partes = valor_nuevo.value.split('/');
+  
+    if (partes.length > 2) {
+      valor_nuevo.value = partes[0] + '/' + partes[1]; 
+    }
+  
+    for (let j = 0; j < partes.length; j++) {
+      let subPartes = partes[j].split('.');
+      if (subPartes.length > 2) {
+        partes[j] = subPartes[0] + '.' + subPartes.slice(1).join('');
+      }
+    }
+  
+    if (partes.length === 2 && partes[1] !== "") {
+      let numerador = parseFloat(partes[0]);
+      let denominador = parseFloat(partes[1]);
+  
+      if (!isNaN(numerador) && !isNaN(denominador) && denominador !== 0) {
+        valor_nuevo.value = (numerador / denominador).toFixed(2); 
+      }
+    }
+
+    console.log("Numero final " + valor_nuevo.value);
+
+    return valor_nuevo;
+}
+
+document.getElementById('enviar__datos').addEventListener('click', function() {
+  const Numero_1 = document.getElementById('Numero_1');
+  const Numero_2 = document.getElementById('Numero_2');
+  
+  validar_numeros(Numero_1);
+  validar_numeros(Numero_2);
+});
 
 
 const crearCadenaMetodoGrafico = (cadena,valor_nuevo,i)=>{
