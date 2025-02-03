@@ -401,6 +401,7 @@ generarRestricciones.addEventListener('click', () => {
 
   // Limpiar campos previos
   camposRestricciones.innerHTML = '';
+  numero_variables = inputCantidadVariables.value;
 
 
     for (let i = 0; i <cantidad_restricciones; i++) {
@@ -423,7 +424,7 @@ generarRestricciones.addEventListener('click', () => {
 
         div.id = `restriccion${i+1}`
         camposRestricciones.appendChild(div);
-      }else{
+      }else{        
         crearCampos(camposRestricciones,i,numero_variables,'restriccion');
       }
         
