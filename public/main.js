@@ -216,7 +216,8 @@ const crearCampos = (campo, i,numero_variables)=>{
     simbolo.appendChild(opcion_menorIgual)
     
   }else{
-    
+    campo.appendChild(simbolo);
+    campo.appenChild(input)
   }
   campo.appendChild(simbolo);
   
