@@ -401,7 +401,7 @@ generarRestricciones.addEventListener('click', () => {
 
   // Limpiar campos previos
   camposRestricciones.innerHTML = '';
-  numero_variables = inputCantidadVariables.value;
+  const numero_variables = inputCantidadVariables.value;
 
 
     for (let i = 0; i <cantidad_restricciones; i++) {
