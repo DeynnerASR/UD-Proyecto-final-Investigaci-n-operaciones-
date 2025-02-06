@@ -245,46 +245,78 @@ generarFuncionObjetivo.addEventListener('click',()=>{
 })
 
 window.validar_numeros = function validar_numeros(valor_nuevo){
-    if (!valor_nuevo || !valor_nuevo.value) {
-      console.error("valor_nuevo no es un input válido" + valor_nuevo.value);
-      return '';
-    }
-  
-    valor_nuevo.value = valor_nuevo.value.replace(/[^0-9./]/g, '');
-  
-    let partes = valor_nuevo.value.split('/');
-  
-    if (partes.length > 2) {
-      valor_nuevo.value = partes[0] + '/' + partes[1]; 
-    }
-  
-    for (let j = 0; j < partes.length; j++) {
-      let subPartes = partes[j].split('.');
-      if (subPartes.length > 2) {
-        partes[j] = subPartes[0] + '.' + subPartes.slice(1).join('');
-      }
-    }
-  
-    if (partes.length === 2 && partes[1] !== "") {
-      let numerador = parseFloat(partes[0]);
-      let denominador = parseFloat(partes[1]);
-  
-      if (!isNaN(numerador) && !isNaN(denominador) && denominador !== 0) {
-        valor_nuevo.value = (numerador / denominador).toFixed(2); 
-      }
-    }
+  if (!valor_nuevo || !valor_nuevo.value) {
+    console.error("valor_nuevo no es un input válido " + valor_nuevo.value);
+    return '';
+  }
 
-    console.log("Numero final " + valor_nuevo.value);
+  valor_nuevo.value = valor_nuevo.value.replace(/[^0-9./]/g, '');
 
-    return valor_nuevo;
+  let partes = valor_nuevo.value.split('/');
+
+  if (partes.length > 2) {
+    valor_nuevo.value = partes[0] + '/' + partes[1]; 
+  }
+
+  for (let j = 0; j < partes.length; j++) {
+    let subPartes = partes[j].split('.');
+    if (subPartes.length > 2) {
+      partes[j] = subPartes[0] + '.' + subPartes.slice(1).join('');
+    }
+  }
+
+  if (partes.length === 2 && partes[1] !== "") {
+    let numerador = parseFloat(partes[0]);
+    let denominador = parseFloat(partes[1]);
+
+    if (!isNaN(numerador) && !isNaN(denominador) && denominador !== 0) {
+      valor_nuevo.value = (numerador / denominador).toFixed(2); 
+    }
+  }
+
+  console.log("Numero final " + valor_nuevo.value);
+
+  return valor_nuevo;
 }
 
 document.getElementById('enviar__datos').addEventListener('click', function() {
-  const Numero_1 = document.getElementById('Numero_1');
-  const Numero_2 = document.getElementById('Numero_2');
-  
-  validar_numeros(Numero_1);
-  validar_numeros(Numero_2);
+const Numero_1 = document.getElementById('Numero_1');
+const Numero_2 = document.getElementById('Numero_2');
+const EntradaCantidadRestricciones = document.getElementById('cantidadRestricciones');
+
+validar_numeros(Numero_1);
+validar_numeros(Numero_2);
+
+const cantidad_restricciones = parseInt(EntradaCantidadRestricciones?.value, 10);
+
+if (isNaN(cantidad_restricciones) || cantidad_restricciones < 1) {
+  console.error("Cantidad de restricciones no válida.");
+  return;
+}
+
+for (let i = 0; i < cantidad_restricciones; i++) {
+  const restriccion1 = document.getElementById(`restriccion_${i+1}_1`);
+  const restriccion2 = document.getElementById(`restriccion_${i+1}_2`);
+  const restriccionR = document.getElementById(`restriccion_${i+1}_resultado`);
+
+  if (restriccion1) {
+    validar_numeros(restriccion1);
+  } else {
+    console.warn(`No se encontró la restricción restriccion_${i+1}_1`);
+  }
+
+  if (restriccion2) {
+    validar_numeros(restriccion2);
+  } else {
+    console.warn(`No se encontró la restricción restriccion_${i+1}_2`);
+  }
+
+  if (restriccionR) {
+    validar_numeros(restriccionR);
+  } else {
+    console.warn(`No se encontró la restricción restriccion_${i+1}_resultado`);
+  }
+}
 });
 
 
@@ -401,31 +433,30 @@ generarRestricciones.addEventListener('click', () => {
 
   // Limpiar campos previos
   camposRestricciones.innerHTML = '';
-  const numero_variables = inputCantidadVariables.value;
 
 
     for (let i = 0; i <cantidad_restricciones; i++) {
       const div = document.createElement('div');
       if (metodo == 'grafico'){
         div.innerHTML = `
-          <input type="number" step="any" required>
+          <input type="text" step="any" required id="restriccion_${i+1}_1">
           <select required>
             <option value="+">+</option>
             <option value="-">-</option>
           </select>
-          <input type="number" step="any" required>
+          <input type="text" step="any" required  id="restriccion_${i+1}_2">
           <select required>
             <option value=">=">≥</option>
             <option value="<=">≤</option>
           </select>
-          <input type="number" step="any"  required>
+          <input type="text" step="any"  required id="restriccion_${i+1}_resultado">
         `;
         div.classList.add('restriccion')
 
         div.id = `restriccion${i+1}`
         camposRestricciones.appendChild(div);
-      }else{        
-        crearCampos(camposRestricciones,i,numero_variables,'restriccion');
+      }else{
+
       }
         
     }
