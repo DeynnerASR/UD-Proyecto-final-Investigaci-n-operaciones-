@@ -73,7 +73,7 @@ const crear_panel_informacion_graficos = (informacion)=>{
   informacion.allIntersections.forEach((interseccion,i)=>{
     const item_punto_interseccion = document.createElement('li');
 
-    item_punto_interseccion.innerHTML = `<strong>Interseccion #${i+1}: </strong>(${interseccion.x},${interseccion.y}) `
+    item_punto_interseccion.innerHTML = `<strong>Interseccion #${i+1}: </strong>(${interseccion.x_1},${interseccion.x_2}) `
     panel_interseccion.appendChild(item_punto_interseccion);
   })
 
