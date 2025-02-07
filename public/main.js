@@ -525,7 +525,6 @@ const realizarPeticion = async (funcionObjetivo,arrayRestricciones,tipo)=>{
         "restrictionsText":arrayRestricciones,
         "isMaximization": true
       }
-      console.log(´Body ${body_de_peticion}´);
 
     const response = await fetch(urlPeticion,
         {
