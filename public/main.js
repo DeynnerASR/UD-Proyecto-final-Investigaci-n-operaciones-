@@ -322,9 +322,9 @@ for (let i = 0; i < cantidad_restricciones; i++) {
 
 const crearCadenaMetodoGrafico = (cadena,valor_nuevo,i)=>{
   if(i == 0){
-    cadena= cadena+`${valor_nuevo}x`
+    cadena= cadena+`${valor_nuevo}x_1`
   }else if(i == 2){
-    cadena= cadena+`${valor_nuevo}x`
+    cadena= cadena+`${valor_nuevo}x_2`
   }else{
     cadena = cadena +`${valor_nuevo}`
   }  
