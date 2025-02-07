@@ -510,8 +510,14 @@ const graficar = (funcionObjetivo,informacion) =>{
 
 const realizarPeticion = async (funcionObjetivo,arrayRestricciones,tipo)=>{
 
-
-    const urlPeticion = 'https://graphicalmethodapi-dmd3bca6e6dpenev.canadacentral-01.azurewebsites.net/graphical-method/linear-problem'
+    
+ let urlPeticion;
+  
+  if(metodo == 'dosFases'){
+   urlPeticion = 'https://graphicalmethodapi-dmd3bca6e6dpenev.canadacentral-01.azurewebsites.net/graphical-method/linear-problem'
+  }else{
+   urlPeticion = 'https://graphicalmethodapi-dmd3bca6e6dpenev.canadacentral-01.azurewebsites.net/graphical-method/two-phases'
+  }
 
 
       const body_de_peticion = {
@@ -519,7 +525,7 @@ const realizarPeticion = async (funcionObjetivo,arrayRestricciones,tipo)=>{
         "restrictionsText":arrayRestricciones,
         "isMaximization": true
       }
-      //console.log(´Body ${body_de_peticion}´);
+      console.log(´Body ${body_de_peticion}´);
 
     const response = await fetch(urlPeticion,
         {
