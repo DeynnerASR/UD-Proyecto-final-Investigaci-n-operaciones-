@@ -324,7 +324,7 @@ const crearCadenaMetodoGrafico = (cadena,valor_nuevo,i)=>{
   if(i == 0){
     cadena= cadena+`${valor_nuevo}x`
   }else if(i == 2){
-    cadena= cadena+`${valor_nuevo}y`
+    cadena= cadena+`${valor_nuevo}x`
   }else{
     cadena = cadena +`${valor_nuevo}`
   }  
