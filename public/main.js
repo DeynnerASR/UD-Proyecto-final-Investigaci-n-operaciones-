@@ -526,6 +526,8 @@ const realizarPeticion = async (funcionObjetivo,arrayRestricciones,tipo)=>{
         "isMaximization": true
       }
 
+    console.log(body_de_peticion)
+
     const response = await fetch(urlPeticion,
         {
             method:"POST",
