@@ -513,8 +513,8 @@ const realizarPeticion = async (funcionObjetivo,arrayRestricciones,tipo)=>{
     
  let urlPeticion;
   
-  if(metodo == 'dosFases'){
-   urlPeticion = 'https://graphicalmethodapi-dmd3bca6e6dpenev.canadacentral-01.azurewebsites.net/graphical-method/linear-problem'
+  if(metodo == 'grafico'){
+    urlPeticion = 'https://graphicalmethodapi-dmd3bca6e6dpenev.canadacentral-01.azurewebsites.net/graphical-method/linear-problem'   
   }else{
    urlPeticion = 'https://graphicalmethodapi-dmd3bca6e6dpenev.canadacentral-01.azurewebsites.net/graphical-method/two-phases'
   }
