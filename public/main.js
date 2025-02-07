@@ -510,6 +510,7 @@ const graficar = (funcionObjetivo,informacion) =>{
 
 const realizarPeticion = async (funcionObjetivo,arrayRestricciones,tipo)=>{
 
+  
     
  let urlPeticion;
   
@@ -519,7 +520,15 @@ const realizarPeticion = async (funcionObjetivo,arrayRestricciones,tipo)=>{
    urlPeticion = 'https://graphicalmethodapi-dmd3bca6e6dpenev.canadacentral-01.azurewebsites.net/graphical-method/two-phases'
   }
 
-
+const prueba = {
+  "objectiveFunctionText": "4x_1 + x_2",
+  "restrictionsText": [
+    "3x_1 + x_2 = 3",
+    "4x_1 + 3x_2 >= 6",
+    "x_1 + 2x_2 <= 4"
+  ],
+  "isMaximization": true
+}
       const body_de_peticion = {
         "objectiveFunctionText":funcionObjetivo,
         "restrictionsText":arrayRestricciones,
@@ -534,11 +543,7 @@ const realizarPeticion = async (funcionObjetivo,arrayRestricciones,tipo)=>{
             headers:{
               "Content-Type": "application/json",
             },
-            body:JSON.stringify({
-                "objectiveFunctionText":funcionObjetivo,
-                "restrictionsText":arrayRestricciones,
-                "isMaximization": true
-            })
+            body:JSON.stringify(prueba)
         })
 /*
     const data = response.then((muestraAlgo)=>{
