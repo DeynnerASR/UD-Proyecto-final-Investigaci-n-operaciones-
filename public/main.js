@@ -73,7 +73,7 @@ const crear_panel_informacion_graficos = (informacion)=>{
   informacion.allIntersections.forEach((interseccion,i)=>{
     const item_punto_interseccion = document.createElement('li');
 
-    item_punto_interseccion.innerHTML = `<strong>Interseccion #${i+1}: </strong>(${interseccion.['x_1']},${interseccion.['x_2']}) `
+    item_punto_interseccion.innerHTML = `<strong>Interseccion #${i+1}: </strong>(${interseccion.x},${interseccion.y}) `
     panel_interseccion.appendChild(item_punto_interseccion);
   })
 
@@ -89,7 +89,7 @@ const crear_panel_informacion_graficos = (informacion)=>{
     item_valor_resultado.innerHTML = `Valor minimo : ${informacion.minValue}`
   }
 
-  item_valor_interseccion_resultado.innerHTML = `Interseccion resultado (${informacion.allIntersections[indice].['x_1']}, ${informacion.allIntersections[indice].['x_2']})`;
+  item_valor_interseccion_resultado.innerHTML = `Interseccion resultado (${informacion.allIntersections[indice].x}, ${informacion.allIntersections[indice].y})`;
 
   console.log(
     `DATOS DE LA PETICION:
@@ -100,7 +100,7 @@ const crear_panel_informacion_graficos = (informacion)=>{
      - indice del valor_maximo : ${informacion.maxIndex}
 
      - indice prueba ${indice}
-     - interseccion resultado (${informacion.allIntersections[indice].['x_1']}, ${informacion.allIntersections[indice].['x_2']})
+     - interseccion resultado (${informacion.allIntersections[indice].x}, ${informacion.allIntersections[indice].y})
     `
   );
 
@@ -322,9 +322,9 @@ for (let i = 0; i < cantidad_restricciones; i++) {
 
 const crearCadenaMetodoGrafico = (cadena,valor_nuevo,i)=>{
   if(i == 0){
-    cadena= cadena+`${valor_nuevo}x_1`
+    cadena= cadena+`${valor_nuevo}x`
   }else if(i == 2){
-    cadena= cadena+`${valor_nuevo}x_2`
+    cadena= cadena+`${valor_nuevo}y`
   }else{
     cadena = cadena +`${valor_nuevo}`
   }  
@@ -510,32 +510,16 @@ const graficar = (funcionObjetivo,informacion) =>{
 
 const realizarPeticion = async (funcionObjetivo,arrayRestricciones,tipo)=>{
 
-  
-    
- let urlPeticion;
-  
-  if(metodo == 'grafico'){
-    urlPeticion = 'https://graphicalmethodapi-dmd3bca6e6dpenev.canadacentral-01.azurewebsites.net/graphical-method/linear-problem'   
-  }else{
-   urlPeticion = 'https://graphicalmethodapi-dmd3bca6e6dpenev.canadacentral-01.azurewebsites.net/graphical-method/two-phases'
-  }
 
-const prueba = {
-  "objectiveFunctionText": "4x_1 + x_2",
-  "restrictionsText": [
-    "3x_1 + x_2 = 3",
-    "4x_1 + 3x_2 >= 6",
-    "x_1 + 2x_2 <= 4"
-  ],
-  "isMaximization": true
-}
+    const urlPeticion = 'https://graphicalmethodapi-dmd3bca6e6dpenev.canadacentral-01.azurewebsites.net/graphical-method/solve'
+
+
       const body_de_peticion = {
         "objectiveFunctionText":funcionObjetivo,
         "restrictionsText":arrayRestricciones,
         "isMaximization": true
       }
-
-    console.log(body_de_peticion)
+      console.log(body_de_peticion);
 
     const response = await fetch(urlPeticion,
         {
@@ -543,7 +527,11 @@ const prueba = {
             headers:{
               "Content-Type": "application/json",
             },
-            body:JSON.stringify(prueba)
+            body:JSON.stringify({
+                "objectiveFunctionText":funcionObjetivo,
+                "restrictionsText":arrayRestricciones,
+                "isMaximization": true
+            })
         })
 /*
     const data = response.then((muestraAlgo)=>{
