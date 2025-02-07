@@ -73,7 +73,7 @@ const crear_panel_informacion_graficos = (informacion)=>{
   informacion.allIntersections.forEach((interseccion,i)=>{
     const item_punto_interseccion = document.createElement('li');
 
-    item_punto_interseccion.innerHTML = `<strong>Interseccion #${i+1}: </strong>(${interseccion.x_1},${interseccion.x_2}) `
+    item_punto_interseccion.innerHTML = `<strong>Interseccion #${i+1}: </strong>(${interseccion.'x_1'},${interseccion.'x_2'}) `
     panel_interseccion.appendChild(item_punto_interseccion);
   })
 
@@ -89,7 +89,7 @@ const crear_panel_informacion_graficos = (informacion)=>{
     item_valor_resultado.innerHTML = `Valor minimo : ${informacion.minValue}`
   }
 
-  item_valor_interseccion_resultado.innerHTML = `Interseccion resultado (${informacion.allIntersections[indice].x_1}, ${informacion.allIntersections[indice].x_2})`;
+  item_valor_interseccion_resultado.innerHTML = `Interseccion resultado (${informacion.allIntersections[indice].'x_1'}, ${informacion.allIntersections[indice].'x_2'})`;
 
   console.log(
     `DATOS DE LA PETICION:
@@ -100,7 +100,7 @@ const crear_panel_informacion_graficos = (informacion)=>{
      - indice del valor_maximo : ${informacion.maxIndex}
 
      - indice prueba ${indice}
-     - interseccion resultado (${informacion.allIntersections[indice].x_1}, ${informacion.allIntersections[indice].x_2})
+     - interseccion resultado (${informacion.allIntersections[indice].'x_1'}, ${informacion.allIntersections[indice].'x_2'})
     `
   );
 
